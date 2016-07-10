@@ -3,7 +3,7 @@
 import json
 from pprint import pprint
 
-tempFile = open("fileNameHere.json")
+tempFile = open("fileNameHere.json.json")
 huffTree = json.load(tempFile)
 tempFile.close()
 pprint(huffTree)
