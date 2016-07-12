@@ -6,7 +6,6 @@ from pprint import pprint
 tempFile = open("fileNameHere.json")
 huffTree = json.load(tempFile)
 tempFile.close()
-pprint(huffTree)
 
 
 def stuff(thing):
@@ -22,11 +21,12 @@ def stuff(thing):
                 if thing[i] == "]":
                     ended = True
                 i += 1
-            encodePair(thing[j+1:i-1])
+            encoded += encodePair(thing[j+1:i-1])
         else:
             encoded += huffTree[currentChar]
             i += 1
     print (encoded)
+    return encoded
 
 
 def encodePair(pair):
@@ -36,7 +36,6 @@ def encodePair(pair):
     length = int(pair[:i])
     i += 1
     dist = int(pair[i:])
-    print(length)
 
     if length == 3:
         result = bin(257)[2:]
@@ -97,8 +96,6 @@ def encodePair(pair):
     else:
         result = bin(285)[2:]
 
-    print (result)
-
     if dist == 1:
         result += bin(257)[2:]
     elif dist == 2:
@@ -118,47 +115,45 @@ def encodePair(pair):
     elif dist <= 24:
         result += bin(265)[2:] + bin(dist - 17)[2:]
     elif dist <= 32:
-        result += bin(266)[2:] + bin(dist - 13)[2:]
+        result += bin(266)[2:] + bin(dist - 25)[2:]
     elif dist <= 48:
-        result += bin(267)[2:] + bin(dist - 15)[2:]
+        result += bin(267)[2:] + bin(dist - 33)[2:]
     elif dist <= 64:
-        result += bin(268)[2:] + bin(dist - 17)[2:]
+        result += bin(268)[2:] + bin(dist - 49)[2:]
     elif dist <= 96:
-        result += bin(269)[2:] + bin(dist - 19)[2:]
+        result += bin(269)[2:] + bin(dist - 65)[2:]
     elif dist <= 128:
-        result += bin(270)[2:] + bin(dist - 23)[2:]
+        result += bin(270)[2:] + bin(dist - 97)[2:]
     elif dist <= 192:
-        result += bin(271)[2:] + bin(dist - 27)[2:]
+        result += bin(271)[2:] + bin(dist - 129)[2:]
     elif dist <= 256:
-        result += bin(272)[2:] + bin(dist - 31)[2:]
+        result += bin(272)[2:] + bin(dist - 193)[2:]
     elif dist <= 384:
-        result += bin(273)[2:] + bin(dist - 35)[2:]
+        result += bin(273)[2:] + bin(dist - 257)[2:]
     elif dist <= 512:
-        result += bin(274)[2:] + bin(dist - 43)[2:]
+        result += bin(274)[2:] + bin(dist - 385)[2:]
     elif dist <= 768:
-        result += bin(275)[2:] + bin(dist - 51)[2:]
+        result += bin(275)[2:] + bin(dist - 513)[2:]
     elif dist <= 1024:
-        result += bin(276)[2:] + bin(dist - 59)[2:]
+        result += bin(276)[2:] + bin(dist - 769)[2:]
     elif dist <= 1536:
-        result += bin(277)[2:] + bin(dist - 67)[2:]
+        result += bin(277)[2:] + bin(dist - 1025)[2:]
     elif dist <= 2048:
-        result += bin(278)[2:] + bin(dist - 83)[2:]
+        result += bin(278)[2:] + bin(dist - 1537)[2:]
     elif dist <= 3072:
-        result += bin(279)[2:] + bin(dist - 99)[2:]
+        result += bin(279)[2:] + bin(dist - 2049)[2:]
     elif dist <= 4096:
-        result += bin(280)[2:] + bin(dist - 115)[2:]
+        result += bin(280)[2:] + bin(dist - 3073)[2:]
     elif dist <= 6144:
-        result += bin(281)[2:] + bin(dist - 131)[2:]
+        result += bin(281)[2:] + bin(dist - 4097)[2:]
     elif dist <= 8192:
-        result += bin(282)[2:] + bin(dist - 163)[2:]
+        result += bin(282)[2:] + bin(dist - 6145)[2:]
     elif dist <= 12288:
-        result += bin(283)[2:] + bin(dist - 195)[2:]
+        result += bin(283)[2:] + bin(dist - 8193)[2:]
     elif dist <= 16384:
-        result += bin(284)[2:] + bin(dist - 227)[2:]
+        result += bin(284)[2:] + bin(dist - 12289)[2:]
     elif dist <= 24576:
-        result += bin(284)[2:] + bin(dist - 227)[2:]
+        result += bin(284)[2:] + bin(dist - 16385)[2:]
     else:
-        result += bin(285)[2:]
-
-
-stuff("hi there [14,1]")
+        result += bin(285)[2:] + bin(dist - 24577)[2:]
+    return result
