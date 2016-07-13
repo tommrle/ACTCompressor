@@ -50,16 +50,19 @@ for b in nodeLeaf:
 	for c in nodeNode:
 		if c.child0 == b.symbol:
 			st = st + str(c.code)
+			temp = c.value
 		elif c.child1 == b.symbol:
 			st = st + str(c.code)
-		else:
-			break
+			temp = c.value
+		elif c.child0 == temp:
+			st = st + str(c.code)
+			temp = c.value
 
 	codeNumbers.append([b.symbol + " : " + st])
 
 
-#for a in codeNumbers:
-#	print a
+for a in codeNumbers:
+	print a
 
 #for x in nodeLeaf:
 #	print x.symbol
