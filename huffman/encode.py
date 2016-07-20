@@ -8,20 +8,20 @@ huffTree = json.load(tempFile)
 tempFile.close()
 
 
-def stuff(thing):
+def encode(stringAfterLZ77):
     encoded = ""
     i = 0
-    while i < len(thing):
-        currentChar = thing[i]
+    while i < len(stringAfterLZ77):
+        currentChar = stringAfterLZ77[i]
         if currentChar == "[" or currentChar == "]":
             j = i
             ended = False
             i += 1
             while not ended:
-                if thing[i] == "]":
+                if stringAfterLZ77[i] == "]":
                     ended = True
                 i += 1
-            encoded += encodePair(thing[j+1:i-1])
+            encoded += encodePair(stringAfterLZ77[j+1:i-1])
         else:
             encoded += huffTree[currentChar]
             i += 1
