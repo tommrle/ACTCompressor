@@ -1,6 +1,7 @@
 #Tree for JSON output
 
 import json
+from SymFreq import SymFreqNode
 
 #input data ***switch to excel import***
 symbol = [' ', '!', 'Z', 'X', 'Q', '?', 'V', 'K', 'q', 'U', 'j', 'z', 'J',
@@ -20,89 +21,80 @@ frequency = [277, 4102, 5610, 7578, 11659, 24305, 31053, 46580, 54221, 57488,
             2553152, 2955858, 4137949, 4186210, 4527332, 4535545, 4729266,
             5263779, 5507692, 7741842]
 
-class SymFreq:
 
-    def __init__(self, sym, freq, cod):
-        self.symbol = sym
-        self.frequency = freq
-        self.code = cod
-        self.children = []
 
-    def add_child(self, child0, child1):
-        self.children.append(child0)
-        self.children.append(child1)
+def createArrayOfLeafNodesFromSymbolsAndFrequencies():
+    symArr = []
+    for index in range(0,len(symbol)):
+        n = SymFreqNode(symbol[index], frequency[index])
+        n.is_a_leaf_node = True
+        symArr.append(n)
+    return symArr
 
-def CreateArray():
-
-    counter = 0
-    for x in symbol:
-        n = SymFreq(symbol[counter], frequency[counter], 2)
-        symbolFrequency.append(n)
-        counter += 1
-
-def BeginTree(leaf1, leaf2, counter):
-
-    symbolFrequency.remove(leaf1)
-    symbolFrequency.remove(leaf2)
-    n = SymFreq('node' + str(counter) ,leaf1.frequency+leaf2.frequency, 2)
+def BeginTree(leaf1, leaf2):
+    symbolFrequencyList.remove(leaf1)
+    symbolFrequencyList.remove(leaf2)
+    n = SymFreqNode('node1',leaf1.frequency+leaf2.frequency);
     n.add_child(leaf1, leaf2)
-    symbolFrequency.append(n)
+    symbolFrequencyList.append(n)
 
-def CreateNode(list):
+def getSymbolWithLowestFrequencyAndRemove(list):
+    # temp = list[0]
+    # for small in list:
+    #     if small.frequency < temp.frequency:
+    #         temp = small
+    # list.remove(temp)
+    # return temp
+    list.sort(key=lambda sym_freq_node: sym_freq_node.depth)
+    temp = list[0]
+    list.remove(temp)
+    return temp
 
-    temp = symbolFrequency[0]
-    for small in symbolFrequency:
-        if small.frequency < temp.frequency:
-            temp = small
+def CreateNextNode(list):
+    lowest_frequency_symbol = getSymbolWithLowestFrequencyAndRemove(list)
 
-
-    if temp.symbol[0:4] == 'node':
-        nodes.append(temp)
+    if lowest_frequency_symbol.is_a_leaf_node:
+        leaves.append(lowest_frequency_symbol)
     else:
-        leaves.append(temp)
-    temp.code = 0
-    symbolFrequency.remove(temp)
+        nodes.append(lowest_frequency_symbol)
 
+    lowest_frequency_symbol.code = 0
 
-    temp2 = symbolFrequency[0]
-    for small in symbolFrequency:
-        if small.frequency < temp2.frequency:
-            temp2 = small
+    second_lowest_frequency_symbol = getSymbolWithLowestFrequencyAndRemove(list)
 
-
-    if temp2.symbol[0:4] == 'node':
-        nodes.append(temp2)
+    if second_lowest_frequency_symbol.is_a_leaf_node:
+        leaves.append(second_lowest_frequency_symbol)
     else:
-        leaves.append(temp2)
-    temp2.code = 1
-    symbolFrequency.remove(temp2)
+        nodes.append(second_lowest_frequency_symbol)
 
+    second_lowest_frequency_symbol.code = 1
 
-    n = SymFreq('node' + str(counter) , temp.frequency + temp2.frequency, 2)
-    n.add_child(temp.symbol, temp2.symbol)
-    symbolFrequency.append(n)
+    #TODO: give tempNode a better name
+    tempNode = SymFreqNode('node' + str(counter), lowest_frequency_symbol.frequency + second_lowest_frequency_symbol.frequency)
+    tempNode.depth = max(lowest_frequency_symbol.depth, second_lowest_frequency_symbol.depth) + 1
+    tempNode.left_child = lowest_frequency_symbol
+    tempNode.right_child = second_lowest_frequency_symbol
+    symbolFrequencyList.append(tempNode)
 
 #############################################################################
 
 #create all arrays needed to track tree
-symbolFrequency = []
+#symbolFrequencyList = []
+
 nodes = []
 leaves = []
 huffman_codes = {}
 
 #create single array of symbols and frequencies
-CreateArray()
-
+symbolFrequencyList = createArrayOfLeafNodesFromSymbolsAndFrequencies()
 
 #calculate the first two leaves of the tree
-counter = 1
-BeginTree(symbolFrequency[0], symbolFrequency[1], counter)
-counter += 1
-
+BeginTree(symbolFrequencyList[0], symbolFrequencyList[1])
 
 #calculate next smallest frequencies and assigns leaves and nodes code values
-while len(symbolFrequency) > 1:
-    CreateNode(symbolFrequency)
+counter = 2
+while len(symbolFrequencyList) > 1:
+    CreateNextNode(symbolFrequencyList)
     counter += 1
 
 
@@ -110,24 +102,24 @@ while len(symbolFrequency) > 1:
 temp = nodes[0].symbol
 for leaf in leaves:
     huff_code = str(leaf.code)
-    for node in nodes:
-        if node.children[0] == leaf.symbol:
-            huff_code = str(node.code) + huff_code
-            temp = node.symbol
-        elif node.children[1] == leaf.symbol:
-            huff_code = str(node.code) + huff_code
-            temp = node.symbol
-        elif node.children[0] == temp:
-            huff_code = str(node.code) + huff_code
-            temp = node.symbol
-        elif node.children[1] == temp:
-            huff_code = str(node.code) + huff_code
-            temp = node.symbol
+    # for node in nodes:
+        # if node.children[0] == leaf.symbol:
+        #     huff_code = str(node.code) + huff_code
+        #     temp = node.symbol
+        # elif node.children[1] == leaf.symbol:
+        #     huff_code = str(node.code) + huff_code
+        #     temp = node.symbol
+        # elif node.children[0] == temp:
+        #     huff_code = str(node.code) + huff_code
+        #     temp = node.symbol
+        # elif node.children[1] == temp:
+        #     huff_code = str(node.code) + huff_code
+        #     temp = node.symbol
 
     huffman_codes[leaf.symbol] = huff_code
 
 ##uncomment to see output
-#print json.dumps(huffman_codes, sort_keys = True, indent = 4)
+print json.dumps(huffman_codes, sort_keys = True, indent = 4)
 
 #write key for Huffman codes to JSON file
 with open('data.json', 'w') as outfile:
