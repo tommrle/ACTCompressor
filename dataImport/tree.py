@@ -125,6 +125,24 @@ for leaf in leaves:
 
     huffman_codes[leaf.symbol] = huff_code
 
+firstStartValue = '00110000'
+secondStartValue = '110010000'
+thirdStartValue = '0000000'
+fourthStartValue = '11000000'
+for code in range(288):
+    if code <= 143:
+        huffman_codes[str(code)] = firstStartValue
+        firstStartValue = format((int(firstStartValue, 2) + int('1', 2)), '08b')
+    elif code <= 255:
+        huffman_codes[str(code)] = secondStartValue
+        secondStartValue = format(int(secondStartValue, 2) + int('1', 2), '09b')
+    elif code <= 279:
+        huffman_codes[str(code)] = thirdStartValue
+        thirdStartValue = format(int(thirdStartValue, 2) + int('1', 2), '07b')
+    elif code <= 287:
+        huffman_codes[str(code)] = fourthStartValue
+        fourthStartValue = format(int(fourthStartValue, 2) + int('1', 2), '08b')
+
 # uncomment to see output
 # print json.dumps(huffman_codes, sort_keys=True, indent=4)
 
