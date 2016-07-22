@@ -9,7 +9,3 @@ class SymFreqNode:
         self.right_child = right_child
         self.is_a_leaf_node = False
         self.depth = 0
-
-    def add_child(self, child0, child1):
-        self.children.append(child0)
-        self.children.append(child1)

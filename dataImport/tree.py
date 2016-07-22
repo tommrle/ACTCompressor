@@ -1,4 +1,4 @@
-#Tree for JSON output
+# Tree for JSON output
 
 import json
 from SymFreq import SymFreqNode
@@ -39,17 +39,13 @@ def BeginTree(leaf1, leaf2):
     n.right_child = leaf2
     symbolFrequencyList.append(n)
 
+
 def getSymbolWithLowestFrequencyAndRemove(list):
-    # temp = list[0]
-    # for small in list:
-    #     if small.frequency < temp.frequency:
-    #         temp = small
-    # list.remove(temp)
-    # return temp
     list.sort(key=lambda sym_freq_node: sym_freq_node.depth)
     temp = list[0]
     list.remove(temp)
     return temp
+
 
 def CreateNextNode(list):
     lowest_frequency_symbol = getSymbolWithLowestFrequencyAndRemove(list)
@@ -76,12 +72,27 @@ def CreateNextNode(list):
     newNodeFromTwoChildren.right_child = second_lowest_frequency_symbol
     symbolFrequencyList.append(newNodeFromTwoChildren)
 
-#############################################################################
+'''
+#for use in later modifications of code
+def scaleTree(node):
+    if  not node.is_a_leaf_node:
+        huff_code = (scaleTree(node.left_child))
+        huff_code = (scaleTree(node.right_child))
+    else:
 
-# create single array of symbols and frequencies
+    return str(node.code)
+
+def calculateMaxDepth(list):
+    maxDepthNode = nodes[0]
+    for node in nodes:
+        if node.depth > maxDepthNode.depth:
+            maxDepthNode = node
+    return maxDepthNode
+'''
+
+
+# create single array of symbols and frequencies then build first two leaves
 symbolFrequencyList = createArrayOfLeafNodesFromSymbolsAndFrequencies()
-
-# calculate the first two leaves of the tree
 BeginTree(symbolFrequencyList[0], symbolFrequencyList[1])
 
 # calculate next smallest frequencies and assigns leaves and nodes code values
@@ -92,31 +103,35 @@ while len(symbolFrequencyList) > 1:
     CreateNextNode(symbolFrequencyList)
     counter += 1
 
-
 # build the Huffman code list for export to JSON
 huffman_codes = {}
+tree = {}
 temp = nodes[0].symbol
 for leaf in leaves:
     huff_code = str(leaf.code)
-    # for node in nodes:
-        # if node.children[0] == leaf.symbol:
-        #     huff_code = str(node.code) + huff_code
-        #     temp = node.symbol
-        # elif node.children[1] == leaf.symbol:
-        #     huff_code = str(node.code) + huff_code
-        #     temp = node.symbol
-        # elif node.children[0] == temp:
-        #     huff_code = str(node.code) + huff_code
-        #     temp = node.symbol
-        # elif node.children[1] == temp:
-        #     huff_code = str(node.code) + huff_code
-        #     temp = node.symbol
+    for node in nodes:
+        if node.left_child == leaf:
+            huff_code = str(node.code) + huff_code
+            temp = node
+        elif node.right_child == leaf:
+            huff_code = str(node.code) + huff_code
+            temp = node
+        elif node.left_child == temp:
+            huff_code = str(node.code) + huff_code
+            temp = node
+        elif node.right_child == temp:
+            huff_code = str(node.code) + huff_code
+            temp = node
 
     huffman_codes[leaf.symbol] = huff_code
 
 # uncomment to see output
-print json.dumps(huffman_codes, sort_keys = True, indent = 4)
+# print json.dumps(huffman_codes, sort_keys=True, indent=4)
 
 # write key for Huffman codes to JSON file
 with open('data.json', 'w') as outfile:
-    json.dump(huffman_codes, outfile, sort_keys = True)
+    json.dump(huffman_codes, outfile, sort_keys=True)
+
+# write tree for debugging
+# with open('tree.json', 'w') as outfile:
+#     json.dump(tree, outfile)
