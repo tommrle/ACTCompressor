@@ -1,15 +1,14 @@
-from sequence_tree import Tree
+from sequence_tree import sequence_tree
 
-three_character_sequences = {}
-root = Tree()
 
 def lz77_process_string(data):
+    root = sequence_tree()
     index = 0
     while index < len(data):
-        print "+++++++++++++"
-        print data
-        print index
-        print data[index:index+3]
+        # print "+++++++++++++"
+        # print data
+        # print index
+        # print data[index:index+3]
         startIndex = root.search(data[index:index+3], index)
         if startIndex is not False:
             newAbbreviation = "["
@@ -19,11 +18,10 @@ def lz77_process_string(data):
             newAbbreviation += "]"
             data = data[0:index] + newAbbreviation + data[index+3:len(data)]
             index += len(newAbbreviation)
-            print "index updated to: " + str(index)
+            # print "index updated to: " + str(index)
         else:
             index += 1
-        print "actual index " + str(index) 
-        print "============="
+        # print "actual index " + str(index)
+        # print "============="
     return data
 
-print lz77_process_string("hello hello hello");

@@ -1,4 +1,4 @@
-class Tree(object):
+class sequence_tree(object):
   def __init__(self):
     self.children = {}
     self.data = None
@@ -18,7 +18,7 @@ class Tree(object):
       if relevantPhrase in self.children.keys():
         return self.children[relevantPhrase].index
       else:
-        self.children[relevantPhrase] = Tree()
+        self.children[relevantPhrase] = sequence_tree()
         self.children[relevantPhrase].index = index
         return False
 
