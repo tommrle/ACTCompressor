@@ -3,12 +3,14 @@
 import json
 from pprint import pprint
 
-tempFile = open("../dataImport/data.json")
-huffTree = json.load(tempFile)
-tempFile.close()
 
 
-def encode(stringAfterLZ77):
+
+def encode(stringAfterLZ77, fileName):
+    tempFile = open(fileName)
+    huffTree = json.load(tempFile)
+    tempFile.close()
+
     encoded = ""
     i = 0
     while i < len(stringAfterLZ77):
@@ -26,7 +28,7 @@ def encode(stringAfterLZ77):
             encoded += "0"
             encoded += huffTree[currentChar]
             i += 1
-    print (encoded)
+    #print (encoded)
     return encoded
 
 
@@ -159,9 +161,9 @@ def encodePair(pair):
         result += bin(285)[2:] + bin(dist - 24577)[2:]
     return result
 
-print huffTree
-
-input="these are some words here and I dont really Know What i should be typing. Should I try to"
-lenIn=len(input)
-lenOut=len(encode(input))
-print "\n"+str(lenIn*8)+" to "+str(lenOut)
+# print huffTree
+#
+# input="These are some words here and I dont really know what i should be typing. Should I try to type actual sentences and stuff? Or should I try to do whatever? The world may never know!"
+# lenIn=len(input)
+# lenOut=len(encode(input))
+# print "\n"+str(lenIn*8)+" to "+str(lenOut)
