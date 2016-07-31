@@ -30,18 +30,24 @@ def createArrayOfLeafNodesFromSymbolsAndFrequencies():
         symArr.append(n)
     return symArr
 
+nodes = []
+leaves = []
 
 def BeginTree(leaf1, leaf2):
     symbolFrequencyList.remove(leaf1)
     symbolFrequencyList.remove(leaf2)
     n = SymFreqNode('node1', leaf1.frequency + leaf2.frequency)
+    leaf1.code = 0
+    leaf2.code = 1
     n.left_child = leaf1
     n.right_child = leaf2
+    leaves.append(leaf1)
+    leaves.append(leaf2)
     symbolFrequencyList.append(n)
 
 
 def getSymbolWithLowestFrequencyAndRemove(list):
-    list.sort(key=lambda sym_freq_node: sym_freq_node.depth)
+    list.sort(key=lambda sym_freq_node: sym_freq_node.frequency)
     temp = list[0]
     list.remove(temp)
     return temp
@@ -96,8 +102,7 @@ symbolFrequencyList = createArrayOfLeafNodesFromSymbolsAndFrequencies()
 BeginTree(symbolFrequencyList[0], symbolFrequencyList[1])
 
 # calculate next smallest frequencies and assigns leaves and nodes code values
-nodes = []
-leaves = []
+
 counter = 2
 while len(symbolFrequencyList) > 1:
     CreateNextNode(symbolFrequencyList)
@@ -125,23 +130,25 @@ for leaf in leaves:
 
     huffman_codes[leaf.symbol] = huff_code
 
-firstStartValue = '00110000'
-secondStartValue = '110010000'
-thirdStartValue = '0000000'
-fourthStartValue = '11000000'
-for code in range(288):
-    if code <= 143:
-        huffman_codes[str(code)] = firstStartValue
-        firstStartValue = format((int(firstStartValue, 2) + int('1', 2)), '08b')
-    elif code <= 255:
-        huffman_codes[str(code)] = secondStartValue
-        secondStartValue = format(int(secondStartValue, 2) + int('1', 2), '09b')
-    elif code <= 279:
-        huffman_codes[str(code)] = thirdStartValue
-        thirdStartValue = format(int(thirdStartValue, 2) + int('1', 2), '07b')
-    elif code <= 287:
-        huffman_codes[str(code)] = fourthStartValue
-        fourthStartValue = format(int(fourthStartValue, 2) + int('1', 2), '08b')
+# ignoring/doing something different for lengths
+#
+# firstStartValue = '00110000'
+# secondStartValue = '110010000'
+# thirdStartValue = '0000000'
+# fourthStartValue = '11000000'
+# for code in range(288):
+#     if code <= 143:
+#         huffman_codes[str(code)] = firstStartValue
+#         firstStartValue = format((int(firstStartValue, 2) + int('1', 2)), '08b')
+#     elif code <= 255:
+#         huffman_codes[str(code)] = secondStartValue
+#         secondStartValue = format(int(secondStartValue, 2) + int('1', 2), '09b')
+#     elif code <= 279:
+#         huffman_codes[str(code)] = thirdStartValue
+#         thirdStartValue = format(int(thirdStartValue, 2) + int('1', 2), '07b')
+#     elif code <= 287:
+#         huffman_codes[str(code)] = fourthStartValue
+#         fourthStartValue = format(int(fourthStartValue, 2) + int('1', 2), '08b')
 
 # uncomment to see output
 # print json.dumps(huffman_codes, sort_keys=True, indent=4)
@@ -153,3 +160,6 @@ with open('data.json', 'w') as outfile:
 # write tree for debugging
 # with open('tree.json', 'w') as outfile:
 #     json.dump(tree, outfile)
+
+print symbolFrequencyList[0]
+

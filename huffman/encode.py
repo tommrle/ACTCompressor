@@ -3,7 +3,7 @@
 import json
 from pprint import pprint
 
-tempFile = open("fileNameHere.json")
+tempFile = open("../dataImport/data.json")
 huffTree = json.load(tempFile)
 tempFile.close()
 
@@ -21,8 +21,9 @@ def encode(stringAfterLZ77):
                 if stringAfterLZ77[i] == "]":
                     ended = True
                 i += 1
-            encoded += encodePair(stringAfterLZ77[j+1:i-1])
+            encoded += "1"+encodePair(stringAfterLZ77[j+1:i-1])
         else:
+            encoded += "0"
             encoded += huffTree[currentChar]
             i += 1
     print (encoded)
@@ -157,3 +158,10 @@ def encodePair(pair):
     else:
         result += bin(285)[2:] + bin(dist - 24577)[2:]
     return result
+
+print huffTree
+
+input="these are some words here and I dont really Know What i should be typing. Should I try to"
+lenIn=len(input)
+lenOut=len(encode(input))
+print "\n"+str(lenIn*8)+" to "+str(lenOut)
