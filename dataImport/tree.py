@@ -2,6 +2,7 @@
 
 import json
 from SymFreq import SymFreqNode
+import pickle
 
 # input data ***switch to excel import***
 symbol = [' ', '!', 'Z', 'X', 'Q', '?', 'V', 'K', 'q', 'U', 'j', 'z', 'J',
@@ -160,6 +161,12 @@ with open('data.json', 'w') as outfile:
 # write tree for debugging
 # with open('tree.json', 'w') as outfile:
 #     json.dump(tree, outfile)
+
+output = open('tree.pkl', 'wb')
+
+pickle.dump(symbolFrequencyList[0], output, -1)
+
+output.close()
 
 print symbolFrequencyList[0]
 
