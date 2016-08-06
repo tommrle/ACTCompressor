@@ -54,3 +54,19 @@ def lz77_process_string_classic(data, window_size=256, min_length=3, max_length=
         index += 1
         compressed_data_index += 1
     return compressed_data
+
+def lz77_decompress(compressed_data):
+    index=0
+    while index < len(compressed_data):
+        if compressed_data[index] == '[':
+            segment_end=index
+            while segment_end < len(compressed_data) and compressed_data[segment_end] != ']':
+                segment_end += 1
+            repeat_data = compressed_data[index+1:segment_end]
+            distance = int(repeat_data.split(',')[0])
+            length = int(repeat_data.split(',')[1])
+            new_segment = compressed_data[(index-distance):(index-distance+length)]
+            compressed_data = compressed_data[:index] + new_segment + compressed_data[segment_end+1:]
+            index += length
+        index += 1
+    return compressed_data
